@@ -33,7 +33,6 @@ io.on('connection', (socket) => {
     room.guest = socket.id;
     socket.join(roomId);
     socket.emit('room-joined', roomId);
-    // Tell host that guest joined
     io.to(room.host).emit('guest-joined');
     console.log('Guest joined room:', roomId);
   });
@@ -53,7 +52,6 @@ io.on('connection', (socket) => {
 
   // Video control events (only host sends these)
   socket.on('video-control', ({ roomId, action, time, muted }) => {
-    // Broadcast to guest only
     socket.to(roomId).emit('video-control', { action, time, muted });
   });
 
@@ -72,5 +70,5 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => console.log(`✅ Server running at http://localhost:${PORT}`));
